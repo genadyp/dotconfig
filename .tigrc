@@ -1,0 +1,5 @@
+set line-graphics = utf-8
+
+bind generic + !git commit --amend
+bind generic = !@sh -c "echo -n %(commit) | xclip -selection c"
+
