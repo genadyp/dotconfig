@@ -1,0 +1,36 @@
+[options]
+font = Inconsolata g 9
+scrollback_lines = 10000
+
+# Base16 Tomorrow
+[colors]
+foreground      = #d7dbe2
+foreground_bold = #d7dbe2
+cursor          = #c5c8c6
+background      = #252a33
+
+# 16 color space
+color0  = #252a33
+color1  = #bf6971
+color2  = #a3be8c
+color3  = #eccf95
+color4  = #5e81ac
+color5  = #6f7e98
+color6  = #8aa1c1
+color7  = #4a5466
+color8  = #38404d
+color9  = #d18a75
+color10 = #88c0d0
+color11 = #8fbcbb
+color12 = #b48ead
+color13 = #d7dbe2
+color14 = #ffffff
+color15 = #5e6b81
+
+# 256 color space
+color16 = #de935f
+color17 = #a3685a
+color18 = #282a2e
+color19 = #373b41
+color20 = #b4b7b4
+color21 = #e0e0e0
