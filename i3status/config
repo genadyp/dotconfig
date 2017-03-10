@@ -1,0 +1,59 @@
+general {
+  colors = true
+  interval = 5
+  color_good      = '#a3be8c'
+  color_degraded  = '#eccf95'
+  color_bad       = '#bf6971'
+}
+
+order += "volume master"
+order += "disk /home"
+order += "wireless wlp2s0"
+order += "ethernet eno1"
+order += "ethernet enx54b80aefd658"
+order += "tztime local"
+order += "battery 0"
+
+wireless wlp2s0 {
+  format_up = "  %essid (%ip)"
+  format_down = "  down"
+}
+
+ethernet eno1 {
+  format_up = "  (%ip)"
+  format_down = "  down"
+}
+
+ethernet enx54b80aefd658 {
+  format_up = "  (%ip)"
+  format_down = "  down"
+}
+
+tztime local {
+  format = "w%V %a   %Y-%m-%d  %H:%M"
+}
+
+disk "/home" {
+  format = "  %avail"
+}
+
+volume master {
+  format = " %volume"
+  format_muted = " %volume"
+  device = "default"
+  mixer = "Master"
+  mixer_idx = 0
+}
+
+battery 0 {
+  format = "%status %percentage"
+  format_down = ""
+  last_full_capacity = true
+  integer_battery_capacity = true
+  low_threshold = 11
+  threshold_type = percentage
+  hide_seconds = true
+  status_chr = " "
+  status_bat = " "
+  status_full = " "
+}

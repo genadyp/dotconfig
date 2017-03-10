@@ -1,0 +1,157 @@
+set $base00 #15181e
+set $base01 #bf6971
+set $base02 #a3be8c
+set $base03 #eccf95
+set $base04 #5e81ac
+set $base05 #6f7e98
+set $base06 #81a1c1
+set $base07 #4a5466
+set $base08 #38404d
+set $base09 #d18a75
+set $base10 #88c0d0
+set $base11 #8fbcbb
+set $base12 #b48ead
+set $base13 #d7dbe2
+set $base14 #ffffff
+set $base15 #5e6b81
+
+bar {
+  id bar-1
+  font pango:System San Francisco 9, SourceCode Pro for Powerline 8
+  separator_symbol "  "
+  status_command i3status
+  position top
+  tray_padding 4
+  workspace_buttons yes
+  colors {
+    separator $base15
+    background $base00
+    statusline $base12
+    focused_workspace $base12 $base12 $base00
+    active_workspace #333333 #333333 #ffffff
+    inactive_workspace $base05 $base05 $base00
+    urgent_workspace $base01 $base01 $base00
+  }
+}
+
+font pango:System San Francisco 9
+hide_edge_borders both
+popup_during_fullscreen leave_fullscreen
+workspace_auto_back_and_forth no
+focus_follows_mouse no
+focus_on_window_activation focus
+
+gaps inner 4
+gaps outer 1
+
+set $mod1 Mod1
+set $mod4 Mod4
+floating_modifier $mod4
+
+set $ws_1 " 1 "
+set $ws_2 " 2 "
+set $ws_3 " 3 "
+set $ws_4 " 4 "
+set $ws_5 " 5 "
+set $ws_6 " 6 "
+
+for_window [class="^.*"] border pixel 0
+for_window [class="Lxappearance"] floating enable
+for_window [class="Arandr"] floating enable
+
+bindsym $mod1+Return exec roxterm
+bindsym $mod4+Return exec roxterm
+
+bindsym $mod4+Shift+q kill
+bindsym $mod4+x kill
+
+bindsym $mod4+d exec --no-startup-id i3-dmenu-desktop
+
+bindsym $mod1+h split horizontal
+bindsym $mod4+v split vertical
+bindsym $mod4+q split toggle
+
+bindsym $mod4+s layout stacking
+bindsym $mod4+w layout tabbed
+bindsym $mod4+e layout toggle split
+bindsym $mod4+f fullscreen toggle
+bindsym $mod4+space focus mode_toggle
+bindsym $mod4+Shift+space floating toggle
+
+bindsym $mod4+h focus left
+bindsym $mod4+j focus down
+bindsym $mod4+k focus up
+bindsym $mod4+l focus right
+
+bindsym $mod4+Shift+h move left
+bindsym $mod4+Shift+j move down
+bindsym $mod4+Shift+k move up
+bindsym $mod4+Shift+l move right
+
+bindsym $mod4+a focus parent
+
+bindsym $mod4+1 workspace $ws_1
+bindsym $mod4+2 workspace $ws_2
+bindsym $mod4+3 workspace $ws_3
+bindsym $mod4+4 workspace $ws_4
+bindsym $mod4+5 workspace $ws_5
+bindsym $mod4+6 workspace $ws_6
+
+bindsym $mod4+Shift+1 move container to workspace $ws_1
+bindsym $mod4+Shift+2 move container to workspace $ws_2
+bindsym $mod4+Shift+3 move container to workspace $ws_3
+bindsym $mod4+Shift+4 move container to workspace $ws_4
+bindsym $mod4+Shift+5 move container to workspace $ws_5
+bindsym $mod4+Shift+6 move container to workspace $ws_6
+
+bindsym $mod4+Shift+c reload
+bindsym $mod4+Shift+r restart
+
+bindsym $mod4+z mode " "
+mode " " {
+  bindsym c exec google-chrome; mode "default"
+  bindsym n exec nautilus; mode "default"
+
+  bindsym Escape mode "default"
+}
+
+bindsym $mod4+p mode "  "
+mode "  " {
+  bindsym e mode "default",exit i3
+  bindsym l mode "default", exec --no-startup-id i3lock
+  bindsym s mode "default",exec systemctl suspend
+  bindsym h mode "default",exec systemctl poweroff
+  bindsym r mode "default",exec systemctl reboot
+
+  bindsym Escape mode "default"
+}
+
+bindsym $mod4+r mode "  "
+mode "  " {
+  bindsym h resize shrink width 10 px or 10 ppt
+  bindsym j resize grow height 10 px or 10 ppt
+  bindsym k resize shrink height 10 px or 10 ppt
+  bindsym l resize grow width 10 px or 10 ppt
+
+  bindsym Escape mode "default"
+}
+
+bindsym $mod4+m mode "  "
+mode "  " {
+  bindsym Up move up 20px
+  bindsym Left move left 20px
+  bindsym Down move down 20px
+  bindsym Right move right 20px
+  bindsym Mod4+m mode "default"
+
+  bindsym Escape mode "default"
+}
+
+#exec --no-startup-id compton -f
+#exec --no-startup-id hsetroot -solid '$base00'
+
+exec --no-startup-id nm-applet
+exec --no-startup-id setxkbmap -option ctrl:nocaps
+exec --no-startup-id rdm
+exec --no-startup-id udiskie -a -n -t
+
