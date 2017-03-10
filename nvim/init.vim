@@ -13,8 +13,13 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
 Plug 'rking/ag.vim'
+
+Plug 'scrooloose/nerdtree', {'on' : 'NERDTreeToggle'}
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 
 Plug 'ervandew/supertab', {'on':[]}
 Plug 'godlygeek/tabular', {'on':[]}
@@ -35,7 +40,7 @@ augroup END
 " Plugins lazy loaded upon filetypes
 Plug 'ddollar/nerdcommenter', {'for' : ['c', 'cpp', 'vim', 'python', 'sh', 'cmake']}
 Plug 'Raimondi/delimitMate', {'for' : ['c', 'cpp', 'h', 'vim']}
-Plug 'rhysd/vim-clang-format', {'for' : ['c', 'cpp', 'h', 'vim']}
+Plug 'rhysd/vim-clang-format', {'for' : ['c', 'cpp', 'h']}
 Plug 'Rip-Rip/clang_complete', {'for' : ['c', 'cpp', 'h']}
 Plug 'lyuts/vim-rtags', {'for' : ['c', 'cpp', 'h']}
 Plug 'arakashic/chromatica.nvim', {'for' : ['c', 'cpp', 'h']}
@@ -193,6 +198,7 @@ if has('folding') | set foldenable | set foldcolumn=2 foldlevel=4 foldnestmax=6 
 " => Searching {{{
 " Highlight search results. Makes search act like search in modern browsers. Turn on regular expressions with magic
 if has('extra_search') | set ignorecase hlsearch incsearch magic | endif
+set inccommand="split"
 "}}}
 " => Autocomplete Settings {{{
 " Settings related to autocomplete
@@ -246,7 +252,7 @@ syntax enable
 if s:is_nvim | set termguicolors | endif
 if s:is_nvim | let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1 | endif
 if s:is_vim
-  if !s:is_gui_running | set t_Co=256 | set t_ut= | endif
+  if !s:is_gui_running | set termguicolors | endif
 endif
 
 set background=dark
@@ -258,7 +264,7 @@ set nobackup nowritebackup noswapfile
 "}}}
 " => Tabs and indent related {{{
 set autoindent cindent
-set expandtab smarttab shiftwidth=2 tabstop=2 softtabstop=2
+set expandtab smarttab shiftwidth=4 tabstop=4 softtabstop=4
 "}}}
 " => Visual mode related {{{
 " in visual block mode, cursor can be positioned where there is no actual character. 
@@ -292,19 +298,30 @@ elseif s:is_unix
 endif
 "}}}
 " -> clang_complete plugin {{{
+"    Wiki: To use clang_complete, I needed LLVM and had dependency
+"          on Python and MinGW headers. 
+"          Needed ".clang_complete" file need to be at the root of project. 
+"
+"          Use: "dir /S *.h" > .clang_complete
+"          on dos prompt to generate entries in file. File needs manual edit
+"          to remove extra stuff to only keep header file paths, one per line
 if s:is_windows | let g:clang_library_path='C:\DevEnv\LLVM\bin' | endif
 
 let g:clang_use_library=1
 let g:clang_user_options='|| exit 0'
 let g:clang_close_preview=1
 
-"behvaior for auto_complete
-let g:clang_complete_auto_select=0
-let g:clang_complete_auto=1
-let g:clang_complete_macros=1
-let g:clang_complete_patterns=1
+""behvaior for auto_complete
+let g:clang_complete_auto = 0
+let g:clang_auto_select = 0
+let g:clang_omnicppcomplete_compliance = 0
+let g:clang_make_default_keymappings = 0
 let g:clang_sort_algo="priority"
-let g:clang_trailing_placeholder=1
+"let g:clang_complete_auto_select=0
+"let g:clang_complete_auto=1
+"let g:clang_complete_macros=1
+"let g:clang_complete_patterns=1
+"let g:clang_trailing_placeholder=1
 
 "behavior on syntax error
 let g:clang_complete_copen=1
@@ -323,13 +340,6 @@ let g:clang_auto_user_options="compile_commands.json"
 " Look for tags file in current directory and go up the tree
 " until one is found
 set tags=./tags,tags;
-"}}}
-" -> Netrw plugin {{{
-" absolute width of netrw window
-let g:netrw_winsize = -40
-
-" do not display info on the top of window
-let g:netrw_banner = 0
 "}}}
 " -> Airline-theme plugin {{{
 if !exists('g:airline_symbols')
@@ -359,6 +369,10 @@ let g:rooter_silent_chdir = 1
 " -> Chromatica plugin {{{
 let g:chromatica#enable_at_startup=1
 " let g:chromatica#highlight_feature_level=1
+"}}}
+" -> Deoplete plugin {{{
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
 "}}}
 "}}}
 " => Include keymap mappings {{{
@@ -471,8 +485,8 @@ nnoremap <silent> <Leader>strip :g/^$/,/./-j<cr>
 nnoremap <silent> <F9> :call ToggleBackground()<cr>
 
 "}}}
-" -> Mappings for netrw plugin {{{
-nnoremap <silent> - :edit.<cr>
+" -> Mappings for NERDTree plugin {{{
+nnoremap <silent> - :NERDTreeToggle<cr>
 "}}}
 " -> Mappings for Tagbar plugin {{{
 nnoremap <silent> <F2> :TagbarToggle<cr>
@@ -486,7 +500,6 @@ nnoremap <silent> <Leader>s :call CheckSyntax()<cr>
 " }}}
 " -> Mappings for vim-rtags plugin {{{
 let g:rtagsUseDefaultMappings = 1
-noremap <F3> :call rtags#JumpTo()<CR>
 "}}}
 " -> Mappings for vim-clang-format plugin {{{
 noremap <Leader>cf :ClangFormat<CR>
@@ -581,4 +594,27 @@ function! GitGrep(terms)
   cgetexpr system('git grep -n "'.a:terms.'"')
   copen
 endfunction "}}}
+
+" Highlight all instances of word under cursor, when idle.
+" Useful when studying strange source code.
+" Type z/ to toggle highlighting on/off.
+nnoremap <leader>h :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+function! AutoHighlightToggle()
+   let @/ = ''
+   if exists('#auto_highlight')
+     au! auto_highlight
+     augroup! auto_highlight
+     setl updatetime=4000
+     echo 'Highlight current word: off'
+     return 0
+  else
+    augroup auto_highlight
+    au!
+    au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+    augroup end
+    setl updatetime=500
+    echo 'Highlight current word: ON'
+  return 1
+ endif
+endfunction
 "}}}
