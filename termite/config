@@ -1,13 +1,15 @@
 [options]
-font = Inconsolata g 9
+font = Source Code Pro for Powerline 12
+allow_bold = true
 scrollback_lines = 10000
+scroll_on_output = true
+scroll_on_keystroke = true
+dynamic_title = true
 
-# Base16 Tomorrow
 [colors]
 foreground      = #d7dbe2
 foreground_bold = #d7dbe2
-cursor          = #c5c8c6
-background      = #252a33
+background      = #15181e
 
 # 16 color space
 color0  = #252a33
@@ -34,3 +36,4 @@ color18 = #282a2e
 color19 = #373b41
 color20 = #b4b7b4
 color21 = #e0e0e0
+
