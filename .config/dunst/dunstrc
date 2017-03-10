@@ -1,0 +1,54 @@
+[global]
+    font = Lekton Regular 14
+    allow_markup = yes
+    format = "<b>%s</b>\n%b"
+    sort = yes
+    indicate_hidden = yes
+    alignment = left
+    bounce_freq = 0
+    show_age_threshold = 60
+    word_wrap = yes
+    ignore_newline = no
+    geometry = "300x5-10+75"
+    transparency = 70
+    idle_threshold = 25
+    monitor = 1
+    follow = none
+    sticky_history = yes
+    line_height = 0
+    separator_height = 4
+    padding = 8
+    horizontal_padding = 8
+    separator_color = "#333333"
+    startup_notification = true
+    dmenu = ~/i3dmenu.sh -p dunst:
+
+[frame]
+    width = 3
+    color = "#15181e"
+
+[shortcuts]
+    close = ctrl+space
+    close_all = ctrl+shift+space
+    history = ctrl+grave
+    context = ctrl+shift+period
+
+[urgency_low]
+    background = "#15181e"
+    foreground = "#d7bde2"
+    timeout = 10
+
+[urgency_normal]
+    background = "#15181e"
+    foreground = "#d7bde2"
+    timeout = 10
+
+[urgency_critical]
+    background = "#333333>"
+    foreground = "#F1113F"
+    timeout = 0
+
+[notify-send]
+   appname = notify-send
+   format = "<span weight='normal' letter_spacing='1000' color='#DFD616'>%s</span>\n%b"
+   urgency = normal
