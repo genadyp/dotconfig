@@ -24,7 +24,7 @@
     dmenu = ~/i3dmenu.sh -p dunst:
 
 [frame]
-    width = 3
+    width = 1
     color = "#15181e"
 
 [shortcuts]
@@ -44,7 +44,7 @@
     timeout = 10
 
 [urgency_critical]
-    background = "#333333>"
+    background = "#15181e"
     foreground = "#F1113F"
     timeout = 0
 

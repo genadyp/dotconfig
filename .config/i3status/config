@@ -8,25 +8,25 @@ general {
 
 order += "volume master"
 order += "disk /home"
-order += "wireless wlp2s0"
-order += "ethernet eno1"
-order += "ethernet enp0s20u6"
+#order += "wireless wlp2s0b1"
+#order += "ethernet eno1"
 order += "tztime local"
 order += "battery 0"
+order += "ethernet enx54b80aefd658"
 
 wireless wlp2s0 {
   format_up = "  %essid (%ip)"
-  format_down = "  down"
+  format_down = " "
 }
 
 ethernet eno1 {
   format_up = "  (%ip)"
-  format_down = "  down"
+  format_down = " "
 }
 
 ethernet enp0s20u6 {
   format_up = "  (%ip)"
-  format_down = "  down"
+  format_down = " "
 }
 
 tztime local {

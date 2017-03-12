@@ -19,7 +19,7 @@ bar {
   id bar-1
   font pango:System San Francisco 12, SourceCode Pro for Powerline 10
   separator_symbol "  "
-  status_command i3status
+  status_command ~/.config/i3status/i3config.sh
   position top
   tray_padding 4
   workspace_buttons yes
@@ -158,6 +158,14 @@ mode "  " {
   bindsym Escape mode "default"
 }
 
+bindsym $mod4+y mode "  "
+mode "  " {
+  bindsym u mode "default", exec setxkbmap us
+  bindsym s mode "default", exec setxkbmap se
+
+  bindsym Escape mode "default"
+}
+
 #exec --no-startup-id hsetroot -solid '$base00'
 exec_always --no-startup-id feh --bg-fill ~/Documents/waterfall.jpg
 exec --no-startup-id sh ~/.screenlayout/layout.sh
@@ -165,7 +173,6 @@ exec --no-startup-id sh ~/.screenlayout/layout.sh
 exec --no-startup-id compton -f
 exec --no-startup-id nm-applet
 exec --no-startup-id dunst
-#exec --no-startup-id setxkbmap -option ctrl:nocaps
 exec --no-startup-id udiskie -a -n -t
 exec --no-startup-id pamac-tray
 
