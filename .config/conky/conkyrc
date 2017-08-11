@@ -1,0 +1,106 @@
+-- vim: ts=4 sw=4 noet ai cindent syntax=lua
+--[[
+Conky, a system monitor, based on torsmo
+
+Any original torsmo code is licensed under the BSD license
+
+All code written since the fork of torsmo is licensed under the GPL
+
+Please see COPYING for details
+
+Copyright (c) 2004, Hannu Saransaari and Lauri Hakkarainen
+Copyright (c) 2005-2012 Brenden Matthews, Philip Kovacs, et. al. (see AUTHORS)
+All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+]]
+
+conky.config = {
+    -- Conky conf
+    background = true,
+    double_buffer = true,
+    cpu_avg_samples = 2,
+    net_avg_samples = 2,
+    update_interval = 1.0,
+    out_to_console = false,
+    out_to_stderr = false,
+    extra_newline = false,
+
+    -- Text settings
+    use_xft = true,
+    --xftalpha = 0.5,
+    font = 'DejaVu Sans Mono:size=10',
+	pad_percents = 2,
+
+    -- Window conf
+    own_window = false,
+    own_window_class = 'Conky',
+    own_window_type = override,
+    alignment = 'tr',
+    border_width = 0,
+    border_inner_margin = 12,
+    border_outer_margin = 12,
+    stippled_borders = 0,
+    default_color = '#8F7263',
+    default_outline_color = 'white',
+    default_shade_color = 'white',
+
+    --Graphics conf
+    draw_borders = true,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    show_graph_scale = false,
+    show_graph_range = false,
+
+    -- size conf
+    gap_x = 20,
+    gap_y = 60,
+    minimum_height = 5,
+    minimum_width = 5,
+    maximum_width = 400,
+
+    uppercase = false,
+    use_spacer = 'none',
+}
+
+conky.text = [[
+${alignc}${font FontAwesome:size12} ${font}$nodename - $kernel
+
+${color #B1622F}${execpi 1800 ~/.config/conky/calendar Göteborg}
+
+${color}${offset 20}Uptime:${color #B1622F} ${uptime}
+${color}Frequency:${color #B1622F} $freq MHz
+${color}RAM Usage:${color #B1622F} $memperc% ${membar 6,80} ${color}${font FontAwesome:size12}     ${font}${fs_used /} ${color #B1622F}${fs_bar 6,80 /}
+${color}CPU Usage:${color #B1622F} ${cpu cpu0}% ${cpubar cpu0 6,80} ${color}${font FontAwesome:size12}     ${font}${fs_used /home} ${color #B1622F}${fs_bar 6,80 /home}
+     ${color}cpu1:${color #B1622F} ${cpu cpu1}% ${cpubar cpu1 6,80}
+     ${color}cpu2:${color #B1622F} ${cpu cpu2}% ${cpubar cpu2 6,80}
+     ${color}cpu3:${color #B1622F} ${cpu cpu3}% ${cpubar cpu3 6,80}
+     ${color}cpu4:${color #B1622F} ${cpu cpu4}% ${cpubar cpu4 6,80}
+
+${color}Network:
+${if_existing /proc/net/route enp0s31f6}${goto -1}${voffset 5}${offset 10}${color #B1622F}${font FontAwesome:size12} ${font} ${addr enp0s31f6} ${endif} ${if_existing /proc/net/route wlp3s0}${goto -1}${voffset 5}${offset 10}${color #B1622F}${font FontAwesome:size12} ${font}${wireless_essid wlp3s0} (${addr wlp3s0}) ${endif}
+
+${font}${color}Processes:${color #B1622F} $processes  ${color}Running:${color #B1622F} $running_processes
+${voffset 6}${color #8F7263}Name               PID   CPU%   MEM%
+${color #B1622F}${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+${color #B1622F}${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+${color #B1622F}${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+${color #B1622F}${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
+]]
+
+--${color #B1622F}${font DejaVu Sans Mono:size=8}${goto -1}${execpi 600 ~/.config/conky/cal | sed 's/^/${alignc}/'}
+--$color #010101}color0 ${color #4F4D4F}color1 ${color #6E635E}color2 ${color #B1622F}color3
+--${color #8F7263}color4 ${color #C99068}color5 ${color #807D83}color6 ${color #A3A1A6}color7
+--${color #666666}color8 ${color #4F4D4F}color9 ${color #6E635E}color10 ${color #B1622F}color11
+--${color #8F7263}color12 ${color #C99068}color13 ${color #807D83}color14 ${color #A3A1A6}color15

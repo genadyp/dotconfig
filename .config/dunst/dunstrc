@@ -1,5 +1,5 @@
 [global]
-    font = Lekton Regular 14
+    font = Lekton Regular 12
     allow_markup = yes
     format = "<b>%s</b>\n%b"
     sort = yes
@@ -20,8 +20,7 @@
     padding = 8
     horizontal_padding = 8
     separator_color = "#333333"
-    startup_notification = true
-    dmenu = ~/i3dmenu.sh -p dunst:
+    startup_notification = false
 
 [frame]
     width = 1
@@ -34,18 +33,12 @@
     context = ctrl+shift+period
 
 [urgency_low]
-    background = "#15181e"
-    foreground = "#d7bde2"
     timeout = 10
 
 [urgency_normal]
-    background = "#15181e"
-    foreground = "#d7bde2"
     timeout = 10
 
 [urgency_critical]
-    background = "#15181e"
-    foreground = "#F1113F"
     timeout = 0
 
 [notify-send]

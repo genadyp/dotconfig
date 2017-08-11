@@ -1,0 +1,64 @@
+#!/bin/env python3
+
+import subprocess
+import re
+import sys
+
+def getCalendar():
+    output = subprocess.check_output(['cal', '-mw']).decode('utf-8')
+    return output
+
+def colorizeDay(output):
+    current_day = subprocess.check_output(['date']).decode('utf-8').split()[2]
+    list = [line for line in output.split('\n') if line]
+    pattern = ' '+current_day+' '
+    for idx, line in enumerate(list):
+        if re.search(pattern, line):
+            ls = re.sub(pattern, '${color #B1622F} ' + current_day + ' ${color}', line)
+            list[idx] = ls
+
+    print('$color')
+    return '\n'.join(list)
+
+def colorizeWeek(output):
+    current_week = subprocess.check_output(['date', '+%V']).decode('utf-8').strip('\n')
+    list = [line for line in output.split('\n') if line]
+    pattern = '^' + current_week + ' '
+    for idx, line in enumerate(list):
+        if re.search(pattern, line):
+            list[idx] = re.sub(pattern, '${color #B1622F}' + current_week + ' ${color}', line)
+
+    return list
+
+def getWeather(URL):
+    response = subprocess.check_output(['curl', URL]).decode('utf-8').split('\n')[1:7]
+    escape = re.compile('\x1b[^.*m]*m')
+    escapeend = re.compile('\x1b*]')
+    weather = []
+    for line in response:
+#weather.append(escapeend.sub('', escape.sub('', line[:75]).rstrip()
+        weather.append(escapeend.sub('', escape.sub('', line).rstrip()
+))
+
+    return weather
+
+def combinedOutput():
+    URL = 'wttr.in/' + sys.argv[1]
+
+    cal_output = colorizeWeek(colorizeDay(getCalendar()))
+    weather_output = getWeather(URL)
+
+    combined_output = []
+    if len(cal_output) > len(weather_output):
+        combined_output = cal_output[:]
+        for idx,line in enumerate(weather_output):
+            combined_output[idx] += weather_output[idx]
+    else:
+        combined_output = weather_output[:]
+        for idx,line in enumerate(cal_output):
+            combined_output[idx] += cal_output[idx]
+
+    print('\n'.join(combined_output))
+
+if __name__ == '__main__':
+    combinedOutput()

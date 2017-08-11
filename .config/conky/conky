@@ -1,0 +1,12 @@
+#!/bin/bash
+
+COUNT=$(pgrep -c conky)
+echo $COUNT
+if [[ $(pgrep -c conky) -ne 0 ]]; then
+    echo "Hi"
+    killall -q conky
+else
+    echo "bye"
+fi
+conky -c ~/.config/conky/conkyrc
+exit 0

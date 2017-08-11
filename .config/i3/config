@@ -1,38 +1,27 @@
-set $base00 #15181e
-set $base01 #bf6971
-set $base02 #a3be8c
-set $base03 #eccf95
-set $base04 #5e81ac
-set $base05 #6f7e98
-set $base06 #81a1c1
-set $base07 #4a5466
-set $base08 #38404d
-set $base09 #d18a75
-set $base10 #88c0d0
-set $base11 #8fbcbb
-set $base12 #b48ead
-set $base13 #d7dbe2
-set $base14 #ffffff
-set $base15 #5e6b81
+set_from_resource $base00 color0 #15181e
+set_from_resource $base01 color1 #bf6971
+set_from_resource $base02 color2 #a3be8c
+set_from_resource $base03 color3 #eccf95
+set_from_resource $base04 color4 #5e81ac
+set_from_resource $base05 color5 #6f7e98
+set_from_resource $base06 color6 #81a1c1
+set_from_resource $base07 color7 #4a5466
+set_from_resource $base08 color8 #38404d
+set_from_resource $base09 color9 #d18a75
+set_from_resource $base10 color10 #88c0d0
+set_from_resource $base11 color11 #8fbcbb
+set_from_resource $base12 color12 #b48ead
+set_from_resource $base13 color13 #d7dbe2
+set_from_resource $base14 color14 #ffffff
+set_from_resource $base15 color15 #5e6b81
 
-bar {
-  id bar-1
-  font pango:System San Francisco 12, SourceCode Pro for Powerline 10
-  separator_symbol "  "
-  status_command ~/.config/i3status/i3config.sh
-  position top
-  tray_padding 4
-  workspace_buttons yes
-  colors {
-    separator $base15
-    background $base00
-    statusline $base13
-    focused_workspace $base12 $base12 $base00
-    active_workspace #333333 #333333 #ffffff
-    inactive_workspace $base05 $base05 $base00
-    urgent_workspace $base01 $base01 $base00
-  }
-}
+# class                 border  backgr. text    indicator child_border
+client.focused          $base03 $base00 $base14 $base04   $base03
+client.focused_inactive #333333 $base00 $base14 #484e50   #5f676a
+client.unfocused        #333333 $base00 $base14 #292d2e   #222222
+client.urgent           #2f343a $base00 $base14 #900000   #900000
+client.placeholder      #000000 $base00 $base14 #000000   #0c0c0c
+client.background       $base00
 
 font pango:System San Francisco 9
 hide_edge_borders both
@@ -55,10 +44,12 @@ set $ws_4 " 4 "
 set $ws_5 " 5 "
 set $ws_6 " 6 "
 
-for_window [class="^.*"] border pixel 0
+for_window [class="^.*"] border pixel 1
 for_window [class="Lxappearance"] floating enable
 for_window [class="Arandr"] floating enable
-for_window [class="Pidgin"] floating enable
+for_window [class="chromium"] floating enable
+for_window [class="Nemo"] floating enable
+for_window [class="Blueman-manager"] floating enable
 
 bindsym $mod1+Return exec termite
 bindsym $mod4+Return exec termite
@@ -66,7 +57,8 @@ bindsym $mod4+Return exec termite
 bindsym $mod4+Shift+q kill
 bindsym $mod4+x kill
 
-bindsym $mod4+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod4+d exec --no-startup-id "rofi -show run -lines 3 -width 40 -opacity 25"
+bindsym $mod1+w exec --no-startup-id "rofi -show window -lines 3 -width 40 -opacity 25"
 
 bindsym $mod1+h split horizontal
 bindsym $mod4+v split vertical
@@ -120,8 +112,7 @@ bindsym $mod4+Shift+r restart
 bindsym $mod4+z mode " "
 mode " " {
   bindsym c exec chromium; mode "default"
-  bindsym n exec nautilus; mode "default"
-  bindsym l exec ~/.screenlayout/layout.sh; mode "default"
+  bindsym n exec nemo; mode "default"
 
   bindsym Escape mode "default"
 }
@@ -144,6 +135,11 @@ mode "  " {
   bindsym k resize shrink height 10 px or 10 ppt
   bindsym l resize grow width 10 px or 10 ppt
 
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
+
   bindsym Escape mode "default"
 }
 
@@ -153,12 +149,16 @@ mode "  " {
   bindsym Left move left 20px
   bindsym Down move down 20px
   bindsym Right move right 20px
-  bindsym Mod4+m mode "default"
+
+  bindsym k move up 20px
+  bindsym h move left 20px
+  bindsym j move down 20px
+  bindsym l move right 20px
 
   bindsym Escape mode "default"
 }
 
-bindsym $mod4+y mode "  "
+bindsym $mod1+l mode "  "
 mode "  " {
   bindsym u mode "default", exec setxkbmap us
   bindsym s mode "default", exec setxkbmap se
@@ -166,13 +166,24 @@ mode "  " {
   bindsym Escape mode "default"
 }
 
-#exec --no-startup-id hsetroot -solid '$base00'
-exec_always --no-startup-id feh --bg-fill ~/Documents/waterfall.jpg
-exec --no-startup-id sh ~/.screenlayout/layout.sh
+bindsym $mod1+p exec "sh $HOME/.config/rofi/monitor-select.sh"
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id "amixer set Master 2%+ && volnoti-show $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1)"
+bindsym XF86AudioLowerVolume exec --no-startup-id "amixer set Master 2%- && volnoti-show $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1)"
+bindsym XF86AudioMute exec --no-startup-id "amixer set Master toggle && if amixer get Master | grep -Fq '[off]'; then volnoti-show -m; else volnoti-show $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); fi"
+bindsym XF86AudioPlay exec --no-startup-id "cmus-remote --pause"
+bindsym XF86AudioNext exec --no-startup-id "cmus-remote --next"
+bindsym XF86AudioPrev exec --no-startup-id "cmus-remote --prev"
+
+
+exec_always --no-startup-id feh --bg-scale ~/Pictures/moon_light-wide.jpg
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+exec_always --no-startup-id bash ~/.config/conky/conky
+exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
 exec --no-startup-id compton -f
 exec --no-startup-id nm-applet
-exec --no-startup-id dunst
-exec --no-startup-id udiskie -a -n -t
+exec --no-startup-id blueman-applet
 exec --no-startup-id pamac-tray
+exec --no-startup-id volnoti
 

@@ -9,12 +9,10 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 call plug#begin('~/.config/nvim/bundle')
 
-Plug 'nanotech/jellybeans.vim'
+Plug 'AlessandroYorba/Alduin'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
 Plug 'rking/ag.vim'
 
 Plug 'scrooloose/nerdtree', {'on' : 'NERDTreeToggle'}
@@ -43,6 +41,7 @@ Plug 'Raimondi/delimitMate', {'for' : ['c', 'cpp', 'h', 'vim']}
 Plug 'rhysd/vim-clang-format', {'for' : ['c', 'cpp', 'h']}
 Plug 'Rip-Rip/clang_complete', {'for' : ['c', 'cpp', 'h']}
 Plug 'lyuts/vim-rtags', {'for' : ['c', 'cpp', 'h']}
+Plug 'zchee/deoplete-jedi', {'for' : ['python']}
 Plug 'arakashic/chromatica.nvim', {'for' : ['c', 'cpp', 'h']}
 
 call plug#end()
@@ -256,7 +255,7 @@ if s:is_vim
 endif
 
 set background=dark
-colorscheme jellybeans
+colorscheme alduin
 "}}}
 " => Files, backups and undo {{{
 " Turn backup off, since most stuff is in SVN, git etc. anyway
@@ -346,7 +345,8 @@ if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 
-let g:airline_theme = 'jellybeans'
+let g:airline_theme = 'alduin'
+
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
