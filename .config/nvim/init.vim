@@ -9,13 +9,12 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 call plug#begin('~/.config/nvim/bundle')
 
-Plug 'AlessandroYorba/Alduin'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'chrisbra/Colorizer'
+Plug 'itchyny/lightline.vim'
 Plug 'rking/ag.vim'
 
-Plug 'scrooloose/nerdtree', {'on' : 'NERDTreeToggle'}
+Plug 'philip-karlsson/bolt.nvim', {'do' : ':UpdateRemotePlugins'}
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 
@@ -197,7 +196,7 @@ if has('folding') | set foldenable | set foldcolumn=2 foldlevel=4 foldnestmax=6 
 " => Searching {{{
 " Highlight search results. Makes search act like search in modern browsers. Turn on regular expressions with magic
 if has('extra_search') | set ignorecase hlsearch incsearch magic | endif
-set inccommand="split"
+set inccommand=nosplit
 "}}}
 " => Autocomplete Settings {{{
 " Settings related to autocomplete
@@ -249,13 +248,13 @@ endif "}}}
 syntax enable
 
 if s:is_nvim | set termguicolors | endif
-if s:is_nvim | let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1 | endif
 if s:is_vim
   if !s:is_gui_running | set termguicolors | endif
 endif
 
-set background=dark
-colorscheme alduin
+" set background=dark
+" let g:neodark#background = '#002b36'
+colorscheme neodark
 "}}}
 " => Files, backups and undo {{{
 " Turn backup off, since most stuff is in SVN, git etc. anyway
@@ -316,11 +315,6 @@ let g:clang_auto_select = 0
 let g:clang_omnicppcomplete_compliance = 0
 let g:clang_make_default_keymappings = 0
 let g:clang_sort_algo="priority"
-"let g:clang_complete_auto_select=0
-"let g:clang_complete_auto=1
-"let g:clang_complete_macros=1
-"let g:clang_complete_patterns=1
-"let g:clang_trailing_placeholder=1
 
 "behavior on syntax error
 let g:clang_complete_copen=1
@@ -340,28 +334,10 @@ let g:clang_auto_user_options="compile_commands.json"
 " until one is found
 set tags=./tags,tags;
 "}}}
-" -> Airline-theme plugin {{{
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-let g:airline_theme = 'alduin'
-
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-
-let g:airline_section_c = '%t'
-let g:airline_section_error = ''
-let g:airline_section_warning = ''
-
-let g:airline_extensions = ['tabline']
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
-let g:airline#extensions#tabline#right_sep = ''
-let g:airline#extensions#tabline#right_alt_sep = ''
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+" -> Lightline plugin {{{
+let g:lightline = {
+      \ 'colorscheme': 'neodark',
+      \ }
 "}}}
 " -> Vim-rooter plugin {{{
 let g:rooter_silent_chdir = 1
@@ -485,9 +461,6 @@ nnoremap <silent> <Leader>strip :g/^$/,/./-j<cr>
 nnoremap <silent> <F9> :call ToggleBackground()<cr>
 
 "}}}
-" -> Mappings for NERDTree plugin {{{
-nnoremap <silent> - :NERDTreeToggle<cr>
-"}}}
 " -> Mappings for Tagbar plugin {{{
 nnoremap <silent> <F2> :TagbarToggle<cr>
 "}}}
@@ -499,7 +472,25 @@ map <silent> <F5> :Ag! <cword><cr>
 nnoremap <silent> <Leader>s :call CheckSyntax()<cr>
 " }}}
 " -> Mappings for vim-rtags plugin {{{
-let g:rtagsUseDefaultMappings = 1
+" let g:rtagsUseDefaultMappings = 1
+noremap <M-i> :call rtags#SymbolInfo()<CR>
+noremap <M-j> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
+noremap <M-J> :call rtags#JumpTo(g:SAME_WINDOW, { '--declaration-only' : '' })<CR>
+noremap <M-S> :call rtags#JumpTo(g:H_SPLIT)<CR>
+noremap <M-V> :call rtags#JumpTo(g:V_SPLIT)<CR>
+noremap <M-T> :call rtags#JumpTo(g:NEW_TAB)<CR>
+noremap <M-p> :call rtags#JumpToParent()<CR>
+noremap <M-f> :call rtags#FindRefs()<CR>
+noremap <M-n> :call rtags#FindRefsByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+noremap <M-s> :call rtags#FindSymbols(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+noremap <M-r> :call rtags#ReindexFile()<CR>
+noremap <M-l> :call rtags#ProjectList()<CR>
+noremap <M-w> :call rtags#RenameSymbolUnderCursor()<CR>
+noremap <M-v> :call rtags#FindVirtuals()<CR>
+noremap <M-b> :call rtags#JumpBack()<CR>
+noremap <M-C> :call rtags#FindSuperClasses()<CR>
+noremap <M-c> :call rtags#FindSubClasses()<CR>
+noremap <M-d> :call rtags#Diagnostics()<CR>
 "}}}
 " -> Mappings for vim-clang-format plugin {{{
 noremap <Leader>cf :ClangFormat<CR>
