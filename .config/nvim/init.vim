@@ -39,7 +39,7 @@ Plug 'ddollar/nerdcommenter', {'for' : ['c', 'cpp', 'vim', 'python', 'sh', 'cmak
 Plug 'Raimondi/delimitMate', {'for' : ['c', 'cpp', 'h', 'vim']}
 Plug 'rhysd/vim-clang-format', {'for' : ['c', 'cpp', 'h']}
 Plug 'Rip-Rip/clang_complete', {'for' : ['c', 'cpp', 'h']}
-Plug 'lyuts/vim-rtags', {'for' : ['c', 'cpp', 'h']}
+Plug 'marxin/neo-rtags', {'for' : ['c', 'cpp', 'h']}
 Plug 'zchee/deoplete-jedi', {'for' : ['python']}
 Plug 'arakashic/chromatica.nvim', {'for' : ['c', 'cpp', 'h']}
 
@@ -471,26 +471,18 @@ map <silent> <F5> :Ag! <cword><cr>
 " -> Mappings for clang_complete plugin {{{
 nnoremap <silent> <Leader>s :call CheckSyntax()<cr>
 " }}}
-" -> Mappings for vim-rtags plugin {{{
-" let g:rtagsUseDefaultMappings = 1
-noremap <M-i> :call rtags#SymbolInfo()<CR>
-noremap <M-j> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
-noremap <M-J> :call rtags#JumpTo(g:SAME_WINDOW, { '--declaration-only' : '' })<CR>
-noremap <M-S> :call rtags#JumpTo(g:H_SPLIT)<CR>
-noremap <M-V> :call rtags#JumpTo(g:V_SPLIT)<CR>
-noremap <M-T> :call rtags#JumpTo(g:NEW_TAB)<CR>
-noremap <M-p> :call rtags#JumpToParent()<CR>
-noremap <M-f> :call rtags#FindRefs()<CR>
-noremap <M-n> :call rtags#FindRefsByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
-noremap <M-s> :call rtags#FindSymbols(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
-noremap <M-r> :call rtags#ReindexFile()<CR>
-noremap <M-l> :call rtags#ProjectList()<CR>
-noremap <M-w> :call rtags#RenameSymbolUnderCursor()<CR>
-noremap <M-v> :call rtags#FindVirtuals()<CR>
-noremap <M-b> :call rtags#JumpBack()<CR>
-noremap <M-C> :call rtags#FindSuperClasses()<CR>
-noremap <M-c> :call rtags#FindSubClasses()<CR>
-noremap <M-d> :call rtags#Diagnostics()<CR>
+" -> Mappings for neo-rtags plugin {{{
+noremap <M-i> :call NeoRtagsSymbolInfo()<CR>
+noremap <M-j> :call NeoRtagsFollowLocation(g:SAME_WINDOW)<CR>
+noremap <M-p> :call NeoRtagsJumpToParent()<CR>
+noremap <M-f> :call NeoRtagsFindReferences()<CR>
+noremap <M-n> :call NeoRtagsFindReferencesByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+noremap <M-r> :call NeoRtagsReindexFile()<CR>
+noremap <M-w> :call NeoRtagsRenameSymbol()<CR>
+noremap <M-v> :call NeoRtagsFindVirtuals()<CR>
+noremap <M-C> :call NeoRtagsFindSuperClasses()<CR>
+noremap <M-c> :call NeoRtagsFindSubclasses()<CR>
+noremap <M-d> :call NeoRtagsDiagnose()<CR>
 "}}}
 " -> Mappings for vim-clang-format plugin {{{
 noremap <Leader>cf :ClangFormat<CR>
