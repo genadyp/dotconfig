@@ -9,10 +9,10 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 call plug#begin('~/.config/nvim/bundle')
 
-Plug 'KeitaNakamura/neodark.vim'
-Plug 'chrisbra/Colorizer'
+Plug 'icymind/NeoSolarized'
 Plug 'itchyny/lightline.vim'
 Plug 'rking/ag.vim'
+" Plug 'chrisbra/Colorizer'
 
 Plug 'philip-karlsson/bolt.nvim', {'do' : ':UpdateRemotePlugins'}
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -41,7 +41,7 @@ Plug 'rhysd/vim-clang-format', {'for' : ['c', 'cpp', 'h']}
 Plug 'Rip-Rip/clang_complete', {'for' : ['c', 'cpp', 'h']}
 Plug 'marxin/neo-rtags', {'for' : ['c', 'cpp', 'h']}
 Plug 'zchee/deoplete-jedi', {'for' : ['python']}
-Plug 'arakashic/chromatica.nvim', {'for' : ['c', 'cpp', 'h']}
+" Plug 'arakashic/chromatica.nvim', {'for' : ['c', 'cpp', 'h']}
 
 call plug#end()
 "}}}
@@ -157,10 +157,7 @@ if has('linebreak') | set linebreak | endif
 set textwidth=120
 
 " Show matching brackets when text indicator is over them
-" Below option causes neovim to hang for some reason
-if s:is_vim
-  set showmatch
-endif
+set showmatch
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
@@ -246,15 +243,9 @@ endif "}}}
 " => Colors {{{
 " Enable syntax highlighting
 syntax enable
-
-if s:is_nvim | set termguicolors | endif
-if s:is_vim
-  if !s:is_gui_running | set termguicolors | endif
-endif
-
-" set background=dark
-" let g:neodark#background = '#002b36'
-colorscheme neodark
+set termguicolors
+set background=light
+colorscheme NeoSolarized
 "}}}
 " => Files, backups and undo {{{
 " Turn backup off, since most stuff is in SVN, git etc. anyway
@@ -335,16 +326,14 @@ let g:clang_auto_user_options="compile_commands.json"
 set tags=./tags,tags;
 "}}}
 " -> Lightline plugin {{{
-let g:lightline = {
-      \ 'colorscheme': 'neodark',
-      \ }
+let g:lightline = { 'colorscheme': 'solarized', }
 "}}}
 " -> Vim-rooter plugin {{{
 let g:rooter_silent_chdir = 1
 "}}}
 " -> Chromatica plugin {{{
-let g:chromatica#enable_at_startup=1
-" let g:chromatica#highlight_feature_level=1
+" let g:chromatica#enable_at_startup=1
+" let g:chromatica#highlight_feature_level=0
 "}}}
 " -> Deoplete plugin {{{
 let g:deoplete#enable_at_startup = 1
