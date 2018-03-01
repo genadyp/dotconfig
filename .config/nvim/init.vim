@@ -35,11 +35,12 @@ augroup load_buf_win_enter_plugins
 augroup END
 
 " Plugins lazy loaded upon filetypes
+Plug 'neomake/neomake'
 Plug 'ddollar/nerdcommenter', {'for' : ['c', 'cpp', 'vim', 'python', 'sh', 'cmake']}
 Plug 'Raimondi/delimitMate', {'for' : ['c', 'cpp', 'h', 'vim']}
 Plug 'rhysd/vim-clang-format', {'for' : ['c', 'cpp', 'h']}
 Plug 'Rip-Rip/clang_complete', {'for' : ['c', 'cpp', 'h']}
-Plug 'marxin/neo-rtags', {'for' : ['c', 'cpp', 'h']}
+Plug 'marxin/neo-rtags', {'for' : ['c', 'cpp', 'h'], 'do' : ':UpdateRemotePlugins'}
 Plug 'zchee/deoplete-jedi', {'for' : ['python']}
 " Plug 'arakashic/chromatica.nvim', {'for' : ['c', 'cpp', 'h']}
 
@@ -339,6 +340,42 @@ let g:rooter_silent_chdir = 1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 "}}}
+" -> Neomake plugin {{{
+let g:neomake_c_enabled_makers = ['clang']
+let g:neomake_c_clang_maker = {
+    \ 'exe' : 'clang',
+    \ 'args' : ['-Wall', '-Wextra', '-Wno-sign-conversion'],
+    \}
+
+let g:neomake_cpp_enabled_makers = ['clang']
+let g:neomake_cpp_clang_maker = {
+    \ 'exe' : 'clang++',
+    \ 'args' : ['-Wall', '-Wextra', '-Wno-sign-conversion'],
+    \}
+
+let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_python_flake8_maker = {
+    \ 'args': ['--ignore=E221,E241,E272,E251,W702,E203,E201,E202',  '--format=default'],
+    \ 'errorformat':
+        \ '%E%f:%l: could not compile,%-Z%p^,' .
+        \ '%A%f:%l:%c: %t%n %m,' .
+        \ '%A%f:%l: %t%n %m,' .
+        \ '%-G%.%#',
+    \ }
+
+let g:neomake_javascript_enabled_makers = ['jscs']
+let g:neomake_javascript_jscs_maker = {
+    \ 'exe': 'jscs',
+    \ 'args': ['--no-color', '--preset', 'airbnb', '--reporter', 'inline', '--esnext'],
+    \ 'errorformat': '%f: line %l\, col %c\, %m',
+    \ }
+" When writing a buffer.
+call neomake#configure#automake('w')
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing.
+call neomake#configure#automake('rw', 1000)
+"}}}
 "}}}
 " => Include keymap mappings {{{
 " -> Moving around, tabs, windows and buffers {{{
@@ -462,16 +499,15 @@ nnoremap <silent> <Leader>s :call CheckSyntax()<cr>
 " }}}
 " -> Mappings for neo-rtags plugin {{{
 noremap <M-i> :call NeoRtagsSymbolInfo()<CR>
+noremap <M-c> :call NeoRtagsFindSubclasses()<CR>
+noremap <M-C> :call NeoRtagsFindSuperClasses()<CR>
+noremap <M-d> :call NeoRtagsDiagnose()<CR>
 noremap <M-j> :call NeoRtagsFollowLocation(g:SAME_WINDOW)<CR>
-noremap <M-p> :call NeoRtagsJumpToParent()<CR>
 noremap <M-f> :call NeoRtagsFindReferences()<CR>
 noremap <M-n> :call NeoRtagsFindReferencesByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
-noremap <M-r> :call NeoRtagsReindexFile()<CR>
-noremap <M-w> :call NeoRtagsRenameSymbol()<CR>
 noremap <M-v> :call NeoRtagsFindVirtuals()<CR>
-noremap <M-C> :call NeoRtagsFindSuperClasses()<CR>
-noremap <M-c> :call NeoRtagsFindSubclasses()<CR>
-noremap <M-d> :call NeoRtagsDiagnose()<CR>
+noremap <M-p> :call NeoRtagsJumpToParent()<CR>
+noremap <M-w> :call NeoRtagsRenameSymbol()<CR>
 "}}}
 " -> Mappings for vim-clang-format plugin {{{
 noremap <Leader>cf :ClangFormat<CR>
