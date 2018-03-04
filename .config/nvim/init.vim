@@ -515,6 +515,9 @@ noremap <Leader>cf :ClangFormat<CR>
 "-> Mappings for FZF plugin {{{
   nnoremap <C-p> :FZF<cr>
 "}}}
+"-> Mappings for Bolt.nvim plugin {{{
+  nnoremap - :Tc<cr>
+"}}}
 " => Status line {{{
 if s:is_vim | if has('statusline') | set laststatus=2 | endif | endif
 "}}}
