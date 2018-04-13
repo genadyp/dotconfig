@@ -1,0 +1,19 @@
+#!/bin/env python
+
+import subprocess
+import sys
+
+def get_windows():
+    try: 
+        windows = subprocess.check_output(["bspc", "query", "-N", "-n", ".hidden"])
+        for id in windows.decode('utf8').split():
+            if len(id):
+                output = subprocess.check_output(["xtitle", id]).decode('utf8')
+                if len(output) > 1:
+                    sys.stdout.write(id + " " + output)
+    except subprocess.CalledProcessError as e:
+        print("No hidden windows")
+
+if '__main__' == __name__:
+    get_windows()
+

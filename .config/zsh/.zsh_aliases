@@ -1,17 +1,73 @@
-alias vi='nvim'
-alias cd='cd'
-alias ez="nvim $ZDOTDIR/.zshrc"
+function cgrep {
+    ag -G "\.[cpp|c|h]$" "${1}"
+}
+
+function jgrep {
+    ag -G "\.java$" "${1}"
+}
+
+function pygrep {
+    ag -G "\.py$" "${1}"
+}
+
+function mkgrep {
+    ag -G "\.mk$" "${1}"
+}
+
+alias tig="tig --all"
+alias reboot=" "
+alias sreboot="/usr/bin/reboot"
+
+alias clock="setxkbmap -option ctrl:nocaps"
+alias sysupdate="sudo -E pacman -Syu"
+alias ez="vi $ZDOTDIR/.zshrc"
 alias ezl="source $ZDOTDIR/.zshrc"
+alias vi="nvim"
+alias mywm="vi $HOME/.config/awesome/rc.lua"
+alias pacrankupdate="sudo reflector -l 50 -p http --sort rate --save /etc/pacman.d/mirrorlist && sudo -E pacman -Syyu"
+alias pacupdate="sudo -E pacman -Syu"
+
+alias ls="ls --color=auto"
 alias top="htop"
 alias rmr="rm -rf"
-alias tig="tig --all"
-alias x="dtrx"
-alias t1="tree -L 1"
-alias t2="tree -L 2"
-alias t3="tree -L 3"
-alias t4="tree -L 4"
+alias make="make -j"
+alias s0="screen /dev/ttyUSB0 115200"
+alias s1="screen /dev/ttyUSB1 115200"
 
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias ll='ls -lh'
+alias la='ls -alh'
+
+function take {
+    mkdir -p $1
+    cd $1
+}
+
+function gpr {
+    git push origin HEAD:refs/for/"${1}"
+}
+
+function gprd {
+    git push origin HEAD:refs/drafts/"${1}"
+}
+
+alias ga='git add'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbd='git branch -D'
+alias gc='git commit -v'
+alias gc!='git commit -v --amend'
+alias gcn!='git commit -v --no-edit --amend'
+alias gca='git commit -v -a'
+alias gca!='git commit -v -a --amend'
+alias gcan!='git commit -v -a --no-edit --amend'
+alias gcb='git checkout -b'
+alias gclean='git clean -fd'
+alias gpristine='git reset --hard && git clean -dfx'
+alias gcm='git checkout master'
+alias gco='git checkout'
+alias gst='git status'
+
