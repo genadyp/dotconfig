@@ -1,8 +1,7 @@
----------------------------------------------
--- Awesome theme which follows xrdb config --
---   by Yauhen Kirylau                    --
----------------------------------------------
-
+local awful = require("awful")
+local gears = require("gears")
+local wibox = require("wibox")
+local lain = require("lain")
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
@@ -13,12 +12,11 @@ local themes_path = gfs.get_themes_dir()
 -- inherit default theme
 local theme = dofile(themes_path.."default/theme.lua")
 -- load vector assets' generators for this theme
-
-theme.font          = "SourceCode Pro for Powerline 6"
+theme.font          = "SauceCodePro Nerd Font Mono 7"
 
 theme.bg_normal     = xrdb.background
-theme.bg_focus      = xrdb.color12
-theme.bg_urgent     = xrdb.color9
+theme.bg_focus      = xrdb.color1
+theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = xrdb.color8
 theme.bg_systray    = theme.bg_normal
 
@@ -27,43 +25,23 @@ theme.fg_focus      = theme.bg_normal
 theme.fg_urgent     = theme.bg_normal
 theme.fg_minimize   = theme.bg_normal
 
-theme.useless_gap   = dpi(0.4)
-theme.border_width  = dpi(0.4)
-theme.border_normal = xrdb.color0
-theme.border_focus  = theme.bg_focus
+theme.useless_gap   = dpi(1)
+theme.border_width  = dpi(1)
+theme.border_normal = xrdb.color2
+theme.border_focus  = xrdb.color7
 theme.border_marked = xrdb.color10
+theme.fg_extra_light = '#303e50'
 
--- There are other variable sets
--- overriding the default one when
--- defined, the sets are:
--- taglist_[bg|fg]_[focus|urgent|occupied|empty|volatile]
--- tasklist_[bg|fg]_[focus|urgent]
--- titlebar_[bg|fg]_[normal|focus]
--- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
--- mouse_finder_[color|timeout|animate_timeout|radius|factor]
--- Example:
---theme.taglist_bg_focus = "#ff0000"
-
+theme.taglist_spacing = 1
+theme.taglist_fg_empty = theme.fg_extra_light
+theme.taglist_fg_occupied = xrdb.color1
 theme.tooltip_fg = theme.fg_normal
 theme.tooltip_bg = theme.bg_normal
 
--- Variables set for theming the menu:
--- menu_[bg|fg]_[normal|focus]
--- menu_[border_color|border_width]
-theme.menu_submenu_icon = themes_path.."default/submenu.png"
-theme.menu_height = dpi(16)
-theme.menu_width  = dpi(100)
-
--- You can add as many variables as
--- you wish and access them by using
--- beautiful.variable in your rc.lua
---theme.bg_widget = "#cc0000"
-
 -- Recolor Layout icons:
-theme = theme_assets.recolor_layout(theme, theme.fg_normal)
+theme = theme_assets.recolor_layout(theme, theme.bg_focus)
 
 -- Recolor titlebar icons:
---
 local function darker(color_value, darker_n)
     local result = "#"
     for s in color_value:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
@@ -74,36 +52,13 @@ local function darker(color_value, darker_n)
     end
     return result
 end
-theme = theme_assets.recolor_titlebar(
-    theme, theme.fg_normal, "normal"
-)
-theme = theme_assets.recolor_titlebar(
-    theme, darker(theme.fg_normal, -60), "normal", "hover"
-)
-theme = theme_assets.recolor_titlebar(
-    theme, xrdb.color1, "normal", "press"
-)
-theme = theme_assets.recolor_titlebar(
-    theme, theme.fg_focus, "focus"
-)
-theme = theme_assets.recolor_titlebar(
-    theme, darker(theme.fg_focus, -60), "focus", "hover"
-)
-theme = theme_assets.recolor_titlebar(
-    theme, xrdb.color1, "focus", "press"
-)
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
 theme.icon_theme = nil
 
--- Generate Awesome icon:
-theme.awesome_icon = theme_assets.awesome_icon(
-    theme.menu_height, theme.bg_focus, theme.fg_focus
-)
-
 -- Generate taglist squares:
-local taglist_square_size = dpi(3)
+local taglist_square_size = dpi(4)
 theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
     taglist_square_size, theme.fg_normal
 )
@@ -118,15 +73,71 @@ for s in theme.bg_normal:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
 end
 local is_dark_bg = (bg_numberic_value < 383)
 
--- Generate wallpaper:
-local wallpaper_bg = xrdb.color0
-local wallpaper_fg = xrdb.color2
-local wallpaper_alt_fg = xrdb.color12
-if not is_dark_bg then
-    wallpaper_bg, wallpaper_fg = wallpaper_fg, wallpaper_bg
-end
-theme.wallpaper = function(s)
-    return theme_assets.wallpaper(wallpaper_bg, wallpaper_fg, wallpaper_alt_fg, s)
+-- theme.wallpaper = "~/.wallpapers/italy-mountains-dawn-daybreak-147411.jpeg"
+theme.wallpaper = "~/.wallpapers/pexels-photo-391726.jpeg"
+
+-- Keyboard map indicator and switcher
+local taglist_buttons = awful.util.table.join(
+                    awful.button({ }, 1, function(t) t:view_only() end),
+                    awful.button({ modkey }, 1, function(t)
+                                              if client.focus then
+                                                  client.focus:move_to_tag(t)
+                                              end
+                                          end),
+                    awful.button({ }, 3, awful.tag.viewtoggle),
+                    awful.button({ modkey }, 3, function(t)
+                                              if client.focus then
+                                                  client.focus:toggle_tag(t)
+                                              end
+                                          end),
+                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+                )
+
+function theme.at_screen_connect(s)
+    -- Quake application
+    s.quake = lain.util.quake({app="termite", argname="--name %s", height=0.70})
+
+    local wallpaper = theme.wallpaper
+    if type(wallpaper) == "function" then
+        wallpaper = wallpaper(s)
+    end
+    gears.wallpaper.maximized(wallpaper, s, true)
+
+    -- Each screen has its own tag table.
+    awful.tag({ "1", "2", "3", "4", "5"}, s, awful.layout.layouts[1])
+    -- Create an imagebox widget which will contain an icon indicating which layout we're using.
+    -- We need one layoutbox per screen.
+    s.mylayoutbox = awful.widget.layoutbox(s)
+    s.mylayoutbox:buttons(awful.util.table.join(
+                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
+                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+    -- Create a taglist widget
+    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
+    -- Create the wibox
+    s.mywibox = awful.wibar({ position = "bottom", screen = s })
+    -- Add widgets to the wibox
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+            s.mytaglist,
+        },
+        dummy, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            awful.widget.keyboardlayout(),
+            wibox.widget.textbox("  "),
+            wibox.widget.textclock("w%V %a %d %H:%M"),
+            wibox.widget.textbox("  "),
+            require('battery-widget') {},
+            wibox.widget.textbox("  "),
+            wibox.widget.systray(),
+            s.mylayoutbox,
+        },
+    }
 end
 
 return theme

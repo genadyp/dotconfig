@@ -6,5 +6,5 @@ function run {
     $@&
   fi
 }
-
 run udiskie -a -t
+run $HOME/.screenlayout/layout.sh
