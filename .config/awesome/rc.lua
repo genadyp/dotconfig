@@ -8,7 +8,6 @@ local beautiful = require("beautiful")
                   require("beautiful.theme_assets")
 local wibox = require("wibox")
 local naughty = require("naughty")
-local revelation = require("revelation")
 local lain = require("lain")
 -- }}}
 -- {{{ Error handling
@@ -33,7 +32,6 @@ end
 -- }}}
 -- {{{ Variable definitions
 beautiful.init(awful.util.getdir("config") .. "themes/theme.lua")
-revelation.init({tag_name = ""})
 
 -- This is used later as the default terminal and editor to run.
 terminal = "termite"
@@ -44,8 +42,7 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
-    awful.layout.suit.max,
-    awful.layout.suit.floating,
+    lain.layout.centerwork,
 }
 -- }}}
 -- {{{ Helper functions
@@ -86,13 +83,22 @@ globalkeys = awful.util.table.join(
               {description="show help", group="awesome"}),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
-    awful.key({ modkey, }, "e", revelation,
-              {description = "Window list", group = "tag"}),
-    awful.key({ modkey, }, "j", function () awful.client.focus.byidx( 1) end,
-              {description = "focus next by index", group = "client"}),
-    awful.key({ modkey, }, "k", function () awful.client.focus.byidx(-1) end,
-              {description = "focus previous by index", group = "client"}),
-    awful.key({ modkey, "Shift"}, ".", function () awful.client.swap.byidx(  1) end,
+    awful.key({ modkey, }, "j",
+        function ()
+            awful.client.focus.byidx( 1)
+        end,
+        {description = "focus next by index", group = "client"}
+    ),
+    awful.key({ modkey, }, "k",
+        function ()
+            awful.client.focus.byidx(-1)
+        end,
+        {description = "focus previous by index", group = "client"}
+    ),
+    awful.key({ modkey, }, "w", function () awful.spawn("rofi -show window -lines 3 -width 30 -opacity 25") end,
+              {description = "show main menu", group = "awesome"}),
+    -- Layout manipulation
+    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
     awful.key({ modkey, "Shift"}, ",", function () awful.client.swap.byidx( -1) end,
               {description = "swap with previous client by index", group = "client"}),
@@ -166,7 +172,7 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
     awful.key({modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end,
-        {description = "toggle fullscreen", group = "client"}),
+              {description = "toggle fullscreen", group = "client"}),
     awful.key({modkey, }, "x", function (c) c:kill() end,
               {description = "close", group = "client"}),
     awful.key({modkey, "Control"}, "space",  awful.client.floating.toggle,
@@ -181,7 +187,7 @@ clientkeys = awful.util.table.join(
               function (c) 
                   c.minimized = true 
               end,
-        {description = "minimize", group = "client"}),
+              {description = "minimize", group = "client"}),
     awful.key({modkey, }, "m", 
               function (c)
                   c.maximized = not c.maximized
@@ -262,26 +268,36 @@ root.buttons(awful.util.table.join(
 -- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
-    { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
-                     raise = true,
-                     keys = clientkeys,
-                     buttons = clientbuttons,
-                     screen = awful.screen.preferred,
-                     placement = awful.placement.no_overlap+awful.placement.no_offscreen
-     }
+    {
+        rule = { },
+        properties = {
+            border_width = beautiful.border_width,
+            border_color = beautiful.border_normal,
+            focus = awful.client.focus.filter,
+            raise = true,
+            keys = clientkeys,
+            buttons = clientbuttons,
+            screen = awful.screen.preferred,
+            placement = awful.placement.no_overlap+awful.placement.no_offscreen
+        }
     },
     -- Floating clients.
-    { rule_any = {
-        instance = { "DTA", "copyq", },
-        class = { "Arandr"},
-        name = { "Event Tester", },
-        role = { "AlarmWindow", "pop-up",     }
-      }, properties = { floating = true }},
+    {
+        rule_any = {
+          instance = { "DTA", "copyq", },
+          class = { "Arandr"},
+          name = { "Event Tester", },
+          role = { "AlarmWindow", "pop-up" }
+        },
+        properties = { floating = true }
+    },
     -- Add titlebars to normal clients and dialogs
-    { rule_any = {type = { "normal", "dialog" } }, properties = { titlebars_enabled = false } },
+    { 
+        rule_any = {
+            type = { "normal", "dialog" } 
+        },
+        properties = { titlebars_enabled = false }
+    },
 }
 -- }}}
 -- {{{ Signals

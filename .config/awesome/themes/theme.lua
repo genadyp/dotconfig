@@ -38,6 +38,15 @@ theme.taglist_fg_occupied = xrdb.color1
 theme.tooltip_fg = theme.fg_normal
 theme.tooltip_bg = theme.bg_normal
 
+theme.lain_icons         = os.getenv("HOME") ..
+                           "/.config/awesome/lain/icons/layout/zenburn/"
+theme.layout_termfair    = theme.lain_icons .. "termfair.png"
+theme.layout_centerfair  = theme.lain_icons .. "centerfair.png"  -- termfair.center
+theme.layout_cascade     = theme.lain_icons .. "cascade.png"
+theme.layout_cascadetile = theme.lain_icons .. "cascadetile.png" -- cascade.tile
+theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
+theme.layout_centerworkh = theme.lain_icons .. "centerworkh.png" -- centerwork.horizontal
+
 -- Recolor Layout icons:
 theme = theme_assets.recolor_layout(theme, theme.bg_focus)
 
@@ -73,7 +82,6 @@ for s in theme.bg_normal:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
 end
 local is_dark_bg = (bg_numberic_value < 383)
 
--- theme.wallpaper = "~/.wallpapers/italy-mountains-dawn-daybreak-147411.jpeg"
 theme.wallpaper = "~/.wallpapers/pexels-photo-391726.jpeg"
 
 -- Keyboard map indicator and switcher
